@@ -1,0 +1,21 @@
+{
+  "name": "PayPal Lite",
+  "short_name": "PayLite",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0070ba",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "paypal_logo_icon_147252.webp",
+      "sizes": "192x192",
+      "type": "image/webp"
+    },
+    {
+      "src": "paypal_logo_icon_147252.webp",
+      "sizes": "512x512",
+      "type": "image/webp"
+    }
+  ]
+}

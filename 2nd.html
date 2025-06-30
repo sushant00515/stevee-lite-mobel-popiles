@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Send Money UI – Updated</title>
+    <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0070ba">
+
+<!-- iOS support -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="image/png">
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: #ffffff;
+      color: #000000;
+    }
+
+    .header {
+      padding: 24px 16px 10px 16px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: 500;
+      color: #222;
+      border-bottom: 2px solid #444;
+      display: inline-block;
+      padding-bottom: 4px;
+    }
+
+   .container {
+  padding: 0 24px 80px 24px; /* more space on left/right */
+}
+
+
+    .input-card {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 16px;
+      padding: 12px 12px;
+      margin-top: 20px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+      position: relative;
+    }
+    .input-card {
+  padding: 16px 12px; /* tighter left-right padding */
+}
+
+
+    .search-input {
+      width: 100%;
+      border: 2px solid #ddd;
+      border-radius: 14px;
+      padding: 14px 16px 14px 42px;
+      font-size: 16px;
+      color: #444;
+      background-color: #fff;
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 0.3s;
+    }
+
+    .search-input:focus {
+      border-color: #0056d2;
+    }
+
+    .search-input::placeholder {
+      color: #888;
+    }
+
+    .search-icon {
+      position: absolute;
+      top: 50%;
+      left: 24px;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+    }
+
+    .next-btn {
+      background-color: #f1f1f1;
+      color: #aaa;
+      border: none;
+      border-radius: 14px;
+      padding: 12px 24px;
+      font-size: 16px;
+      margin: 16px 0 12px 16px;
+      display: inline-block;
+      cursor: not-allowed;
+      transition: all 0.3s;
+    }
+
+    .next-btn.active {
+      background-color: #0056d2;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .link {
+      color: #0056d2;
+      text-decoration: underline;
+      font-size: 16px;
+      margin: 0 0 24px 16px;
+      display: inline-block;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 500;
+      margin: 16px 0 12px 16px;
+    }
+
+    .option {
+      display: flex;
+      align-items: center;
+      margin-bottom: 14px;
+      font-size: 16px;
+      padding-left: 16px;
+    }
+
+    .option img {
+      width: 26px;
+      height: 26px;
+      margin-right: 12px;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #fff;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0 4px;
+      border-top: 1px solid #ddd;
+    }
+
+    .nav-item {
+      text-align: center;
+      font-size: 12px;
+      color: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-item img {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 4px;
+    }
+
+    .suggestions-list {
+  list-style: none;
+  margin: 8px auto 0;
+  padding: 0;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: none;
+  max-height: 220px;
+  overflow-y: auto;
+  position: relative;
+  width: calc(100% - 32px); /* matches container padding (16px left/right) */
+}
+
+
+    .suggestions-list li {
+      padding: 12px 16px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .suggestions-list li:last-child {
+      border-bottom: none;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #0056d2;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 16px;
+      margin-right: 12px;
+    }
+    @media (max-width: 480px) {
+  .container {
+    padding: 0 20px 80px 20px;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="title">Send Money</div>
+  </div>
+
+  <div class="input-card">
+  <img class="search-icon" src="search-893.png" alt="Search" />
+  <input id="inputField" class="search-input" type="text" placeholder="Name, email, mobile" />
+</div>
+
+<ul id="suggestions" class="suggestions-list"></ul>
+
+
+    <button id="nextBtn" class="next-btn"onclick="window.location.href='balance.html'">Next</button>
+    <br>
+    <div class="link">Show all contacts</div>
+
+    <div class="section-title">More options</div>
+    <div class="option"><img src="Untitled design (11).png" alt="Pool" /> Pool money</div>
+    <div class="option"><img src="Untitled design (12).png" alt="Split" /> Split a bill</div>
+    <div class="option"><img src="Untitled design (13).png" alt="Gift" /> Send a digital gift card</div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item"><img src="Untitled design (7).png" alt="Home" /><div>Home</div></div>
+    <div class="nav-item"><img src="Untitled design (8).png" alt="Wallet" /><div>Wallet</div></div>
+    <div class="nav-item"><img src="Untitled design (9).png" alt="Payments" /><div>Payments</div></div>
+    <div class="nav-item"><img src="Untitled design (10).png" alt="Profile" /><div>Profile</div></div>
+  </div>
+
+  <script>
+    const input = document.getElementById('inputField');
+    const nextBtn = document.getElementById('nextBtn');
+    const suggestions = document.getElementById('suggestions');
+
+    const users = [
+      { name: 'Emily Smith', username: '@emily_smith' },
+      { name: 'Olivia Martinez', username: '@olivia_m' },
+      { name: 'Liam Jones', username: '@liam.j' },
+      { name: 'Mason Brown', username: '@mason_b' },
+      { name: 'Mia Johnson', username: '@mia.j' }
+    ];
+
+    input.addEventListener('focus', () => {
+      filterAndShowSuggestions(input.value.trim().toLowerCase());
+    });
+
+    input.addEventListener('input', () => {
+      const query = input.value.trim().toLowerCase();
+      filterAndShowSuggestions(query);
+
+      if (query.length > 0) {
+        nextBtn.classList.add('active');
+        nextBtn.disabled = false;
+      } else {
+        nextBtn.classList.remove('active');
+        nextBtn.disabled = true;
+      }
+    });
+
+    function filterAndShowSuggestions(query) {
+      const matched = users.filter(user =>
+        user.name.toLowerCase().includes(query) ||
+        user.username.toLowerCase().includes(query)
+      );
+
+      showSuggestions(matched);
+    }
+
+    function showSuggestions(list) {
+      suggestions.innerHTML = '';
+
+      if (list.length === 0) {
+        suggestions.style.display = 'none';
+        return;
+      }
+
+      list.forEach(user => {
+        const li = document.createElement('li');
+
+        const image = document.createElement('img');
+image.src = 'Untitled design (6).png';
+image.style.width = '36px';
+image.style.height = '36px';
+image.style.borderRadius = '50%';
+image.style.marginRight = '12px';
+
+
+        const text = document.createElement('div');
+        text.innerHTML = `<strong>${user.name}</strong><br/><small>${user.username}</small>`;
+
+        li.appendChild(image);
+li.appendChild(text);
+
+
+        li.addEventListener('click', () => {
+          input.value = user.name;
+          suggestions.style.display = 'none';
+          nextBtn.classList.add('active');
+          nextBtn.disabled = false;
+        });
+
+        suggestions.appendChild(li);
+      });
+
+      suggestions.style.display = 'block';
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!document.querySelector('.input-card').contains(e.target)) {
+        suggestions.style.display = 'none';
+      }
+    });
+  </script>
+<!-- In 2nd.html, modify the Next button script -->
+<script>
+
+
+  nextBtn.addEventListener('click', () => {
+    if (input.value.trim()) {
+      localStorage.setItem('recipientName', input.value.trim());
+      window.location.href = 'balance.html';
+    }
+  });
+</script>
+
+</body>
+</html>

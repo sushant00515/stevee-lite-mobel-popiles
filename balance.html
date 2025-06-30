@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0070ba">
+
+<!-- iOS support -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="image/png">
+  <title>Send Money</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      margin: 0;
+      background: #fff;
+    }
+    .top-header {
+      background-color: #fff;
+      padding: 16px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+    }
+    .top-header span {
+      font-size: 24px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+    .top-header h1 {
+      font-size: 18px;
+      font-weight: 500;
+      margin: 0;
+    }
+    .container {
+      max-width: 390px;
+      margin: auto;
+      padding: 16px;
+    }
+    .avatar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 30px 0 20px;
+    }
+    .avatar-circle {
+      width: 60px;
+      height: 60px;
+      background-color: #0060df;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+    }
+    .username {
+      margin-top: 8px;
+      font-size: 15px;
+      color: #333;
+    }
+    .amount-wrapper {
+      margin: 20px 0;
+      border: 2px solid #ccc;
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 36px;
+      font-weight: bold;
+    }
+    .amount-wrapper:focus-within {
+      border-color: #0070f3;
+    }
+    .amount-input {
+      border: none;
+      font-size: 36px;
+      font-weight: bold;
+      text-align: center;
+      width: 100%;
+      outline: none;
+    }
+    .currency-label {
+      font-size: 16px;
+      font-weight: 500;
+      color: #333;
+    }
+    .send-btn {
+      width: 100%;
+      padding: 16px;
+      background-color: #0070f3;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 20px;
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .send-btn.active {
+      opacity: 1;
+      cursor: pointer;
+    }
+    .terms {
+      text-align: center;
+      font-size: 12px;
+      color: #777;
+    }
+    .terms a {
+      color: #0070f3;
+      text-decoration: none;
+      font-size: 13px;
+    }
+    .terms p {
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-header">
+    <span>&larr;</span>
+    <h1>Send money</h1>
+  </div>
+
+  <div class="container">
+    <div class="avatar">
+      <div class="avatar-circle" id="avatarInitials">@@</div>
+      <div class="username" id="recipientDisplay">@illiachinchilla</div>
+    </div>
+
+    <div class="amount-wrapper">
+      <input type="number" class="amount-input" id="amountInput" placeholder="0.00" inputmode="decimal" pattern="[0-9]*" />
+      <span class="currency-label">EUR</span>
+    </div>
+
+    <button class="send-btn" id="sendBtn" disabled>Send 0.00 EUR</button>
+
+    <div class="terms">
+      <a href="#">Terms and Conditions</a>
+      <p>By sending money, you agree to PayPal's user agreement and privacy policy.</p>
+    </div>
+  </div>
+
+  <script>
+  
+
+    amountInput.addEventListener("input", () => {
+      const value = amountInput.value.trim();
+      if (value && parseFloat(value) > 0) {
+        sendBtn.disabled = false;
+        sendBtn.classList.add("active");
+        sendBtn.textContent = `Send ${parseFloat(value).toFixed(2)} EUR`;
+      } else {
+        sendBtn.disabled = true;
+        sendBtn.classList.remove("active");
+        sendBtn.textContent = "Send 0.00 EUR";
+      }
+    });
+
+    
+
+  </script>
+
+
+
+<script>
+  const amountInput = document.getElementById("amountInput");
+  const sendBtn = document.getElementById("sendBtn");
+  const usernameDiv = document.getElementById("recipientDisplay");
+
+  // enable/disable send button based on input
+  amountInput.addEventListener("input", () => {
+    const value = amountInput.value.trim();
+    if (value && parseFloat(value) > 0) {
+      sendBtn.disabled = false;
+      sendBtn.classList.add("active");
+      sendBtn.textContent = `Send ${parseFloat(value).toFixed(2)} EUR`;
+    } else {
+      sendBtn.disabled = true;
+      sendBtn.classList.remove("active");
+      sendBtn.textContent = "Send 0.00 EUR";
+    }
+  });
+
+  // 🔴 THIS IS THE IMPORTANT PART YOU NEED 🔴
+  sendBtn.addEventListener("click", () => {
+    if (!sendBtn.disabled) {
+      sendBtn.disabled = true;
+      sendBtn.textContent = "Sending...";
+      sendBtn.classList.remove("active");
+
+      setTimeout(() => {
+        const amount = parseFloat(amountInput.value.trim()).toFixed(2);
+        const transaction = {
+          name: usernameDiv.textContent,
+          amount: amount,
+          date: new Date().toLocaleDateString("en-GB")
+        };
+
+        let history = JSON.parse(localStorage.getItem("history")) || [];
+        history.unshift(transaction);
+        if (history.length > 9) history = history.slice(0, 9);
+        localStorage.setItem("history", JSON.stringify(history));
+
+        window.location.href = `index.html?success=true&amount=${amount}&to=${encodeURIComponent(transaction.name)}`;
+      }, 2000);
+    }
+  });
+
+  // load recipient from previous page
+const recipient = localStorage.getItem("recipientName") || "@unknown";
+const cleaned = recipient.trim().replace(/\s+/g, '').toLowerCase();
+usernameDiv.textContent = `@${cleaned}`;
+
+// Set initials in avatar
+const avatar = document.getElementById("avatarInitials");
+if (cleaned.length >= 2) {
+  avatar.textContent = cleaned.slice(0, 2);
+} else {
+  avatar.textContent = cleaned.charAt(0);
+}
+
+</script>
+
+  
+</script>
+</body>
+</html>
